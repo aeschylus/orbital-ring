@@ -34,7 +34,8 @@ export function Earth() {
     (state) => state.context.parameters.showAtmosphere,
   );
 
-  const texture = useTexture("/textures/earth_daymap.jpg");
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const texture = useTexture(`${basePath}/textures/earth_daymap.jpg`);
 
   const atmosphereMaterial = useMemo(
     () =>

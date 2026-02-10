@@ -29,7 +29,8 @@ export function IntroEarth() {
   const earthRef = useRef<THREE.Mesh>(null);
   const radius = EARTH.RADIUS_KM * SCALE.KM_TO_SCENE;
 
-  const texture = useTexture("/textures/earth_daymap.jpg");
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const texture = useTexture(`${basePath}/textures/earth_daymap.jpg`);
 
   const atmosphereMaterial = useMemo(
     () =>
