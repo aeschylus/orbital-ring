@@ -10,7 +10,7 @@ import { MissionSidebar } from "@/components/dom/MissionSidebar";
 import { NodeDetail } from "@/components/dom/NodeDetail";
 
 export default function CampaignPage() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>("1");
   const [expandedIds, setExpandedIds] = useState<Set<string>>(
     () => new Set(getTopLevelIds())
   );
