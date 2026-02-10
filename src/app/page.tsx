@@ -1,22 +1,53 @@
-import Link from "next/link";
+"use client";
 
-export default function Home() {
+import { useEffect } from "react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { IntroProvider, IntroContext } from "@/providers/IntroProvider";
+import { IntroOverlay } from "@/components/dom/intro/IntroOverlay";
+
+const IntroCanvas = dynamic(
+  () =>
+    import("@/components/canvas/intro/IntroCanvas").then(
+      (mod) => mod.IntroCanvas,
+    ),
+  { ssr: false, loading: () => <LoadingScreen /> },
+);
+
+function LoadingScreen() {
   return (
-    <main className="flex h-screen flex-col items-center justify-center gap-8">
-      <h1 className="text-4xl font-bold tracking-tight">
-        Orbital Ring Simulator
-      </h1>
-      <p className="max-w-lg text-center text-lg text-gray-400">
-        Engineering simulation platform for orbital ring and tethered ring
-        megastructures. Combines orbital mechanics, atmospheric modeling,
-        structural analysis, and deployment simulation.
-      </p>
-      <Link
-        href="/simulation"
-        className="rounded-lg bg-blue-600 px-6 py-3 text-lg font-medium text-white transition-colors hover:bg-blue-500"
-      >
-        Launch Simulation
-      </Link>
-    </main>
+    <div className="flex h-full items-center justify-center bg-black">
+      <div className="text-center">
+        <div className="mb-4 h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent mx-auto" />
+        <p className="text-gray-400">Preparing cinematic...</p>
+      </div>
+    </div>
+  );
+}
+
+function IntroComplete() {
+  const router = useRouter();
+  const isComplete = IntroContext.useSelector(
+    (state) => state.value === "complete",
+  );
+
+  useEffect(() => {
+    if (isComplete) {
+      router.push("/campaign");
+    }
+  }, [isComplete, router]);
+
+  return null;
+}
+
+export default function IntroPage() {
+  return (
+    <IntroProvider>
+      <div className="relative h-screen w-screen bg-black">
+        <IntroCanvas />
+        <IntroOverlay />
+        <IntroComplete />
+      </div>
+    </IntroProvider>
   );
 }

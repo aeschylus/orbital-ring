@@ -6,7 +6,12 @@ import * as THREE from "three";
 import { EARTH, SCALE } from "@/lib/constants/physical";
 import { SimulationContext } from "@/providers/SimulationProvider";
 
-export function Ring() {
+interface RingProps {
+  tubularSegments?: number;
+  radialSegments?: number;
+}
+
+export function Ring({ tubularSegments = 256, radialSegments = 32 }: RingProps) {
   const ringRef = useRef<THREE.Mesh>(null);
   const altitude = SimulationContext.useSelector(
     (state) => state.context.parameters.altitude,
@@ -19,8 +24,8 @@ export function Ring() {
     (EARTH.RADIUS_KM + altitude) * SCALE.KM_TO_SCENE;
 
   const ringGeometry = useMemo(() => {
-    return new THREE.TorusGeometry(ringRadius, 2 * SCALE.KM_TO_SCENE, 16, 256);
-  }, [ringRadius]);
+    return new THREE.TorusGeometry(ringRadius, 2 * SCALE.KM_TO_SCENE, radialSegments, tubularSegments);
+  }, [ringRadius, radialSegments, tubularSegments]);
 
   useFrame((_, delta) => {
     if (ringRef.current && isRunning) {

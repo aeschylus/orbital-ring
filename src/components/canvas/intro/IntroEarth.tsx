@@ -5,7 +5,6 @@ import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { EARTH, SCALE } from "@/lib/constants/physical";
-import { SimulationContext } from "@/providers/SimulationProvider";
 
 const atmosphereVertexShader = `
   varying vec3 vNormal;
@@ -26,13 +25,9 @@ const atmosphereFragmentShader = `
   }
 `;
 
-export function Earth() {
+export function IntroEarth() {
   const earthRef = useRef<THREE.Mesh>(null);
   const radius = EARTH.RADIUS_KM * SCALE.KM_TO_SCENE;
-
-  const showAtmosphere = SimulationContext.useSelector(
-    (state) => state.context.parameters.showAtmosphere,
-  );
 
   const texture = useTexture("/textures/earth_daymap.jpg");
 
@@ -56,18 +51,13 @@ export function Earth() {
 
   return (
     <group>
-      {/* Earth sphere */}
       <mesh ref={earthRef}>
         <sphereGeometry args={[radius, 64, 64]} />
         <meshStandardMaterial map={texture} roughness={0.8} />
       </mesh>
-
-      {/* Atmosphere glow */}
-      {showAtmosphere && (
-        <mesh material={atmosphereMaterial}>
-          <sphereGeometry args={[radius * 1.02, 64, 64]} />
-        </mesh>
-      )}
+      <mesh material={atmosphereMaterial}>
+        <sphereGeometry args={[radius * 1.02, 64, 64]} />
+      </mesh>
     </group>
   );
 }

@@ -8,6 +8,7 @@ export interface SimulationParameters {
   spinRate: number; // rad/s
   showForceVectors: boolean;
   showAtmosphere: boolean;
+  showTethers: boolean;
 }
 
 interface SimulationContext {
@@ -36,6 +37,7 @@ const defaultParameters: SimulationParameters = {
   spinRate: 0.001,
   showForceVectors: false,
   showAtmosphere: true,
+  showTethers: true,
 };
 
 export const simulationMachine = setup({

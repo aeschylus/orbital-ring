@@ -3,8 +3,8 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars, Stats } from "@react-three/drei";
 import { Earth } from "./Earth";
-import { Ring } from "./Ring";
-import { Tethers } from "./Tethers";
+import { RingLOD } from "./RingLOD";
+import { CameraRelativeGroup } from "./CameraRelativeGroup";
 import { SimulationContext } from "@/providers/SimulationProvider";
 import { useEffect } from "react";
 import { EARTH, SCALE } from "@/lib/constants/physical";
@@ -20,22 +20,24 @@ function Scene() {
     <>
       <ambientLight intensity={0.1} />
       <directionalLight position={[50000, 30000, 50000]} intensity={1.5} />
-      <Stars
-        radius={100000}
-        depth={50000}
-        count={5000}
-        factor={100}
-        saturation={0}
-      />
-      <Earth />
-      <Ring />
-      <Tethers />
       <OrbitControls
-        minDistance={EARTH.RADIUS_KM * SCALE.KM_TO_SCENE * 1.1}
+        makeDefault
+        minDistance={EARTH.RADIUS_KM * SCALE.KM_TO_SCENE * 1.01}
         maxDistance={EARTH.RADIUS_KM * SCALE.KM_TO_SCENE * 5}
         enableDamping
         dampingFactor={0.05}
       />
+      <CameraRelativeGroup>
+        <Stars
+          radius={100000}
+          depth={50000}
+          count={5000}
+          factor={100}
+          saturation={0}
+        />
+        <Earth />
+        <RingLOD />
+      </CameraRelativeGroup>
       <Stats />
     </>
   );
@@ -47,7 +49,7 @@ export function SimulationCanvas() {
       camera={{
         position: [0, 0, EARTH.RADIUS_KM * SCALE.KM_TO_SCENE * 2.5],
         fov: 45,
-        near: 1,
+        near: 0.1,
         far: 1_000_000,
       }}
       gl={{ logarithmicDepthBuffer: true, antialias: true }}

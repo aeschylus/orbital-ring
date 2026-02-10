@@ -1,20 +1,26 @@
 "use client";
 
-import { useMemo, useRef, useEffect } from "react";
+import { useMemo } from "react";
 import * as THREE from "three";
 import { EARTH, SCALE } from "@/lib/constants/physical";
 import { SimulationContext } from "@/providers/SimulationProvider";
 
-export function Tethers() {
+interface TethersProps {
+  maxVisible?: number;
+}
+
+export function Tethers({ maxVisible }: TethersProps) {
   const altitude = SimulationContext.useSelector(
     (state) => state.context.parameters.altitude,
   );
   const tetherCount = SimulationContext.useSelector(
     (state) => state.context.parameters.tetherCount,
   );
-  const groupRef = useRef<THREE.Group>(null);
+  const showTethers = SimulationContext.useSelector(
+    (state) => state.context.parameters.showTethers,
+  );
 
-  const displayCount = Math.min(tetherCount, 100);
+  const displayCount = maxVisible ? Math.min(tetherCount, maxVisible) : tetherCount;
 
   const geometry = useMemo(() => {
     const earthR = EARTH.RADIUS_KM * SCALE.KM_TO_SCENE;
@@ -41,8 +47,10 @@ export function Tethers() {
     return geo;
   }, [altitude, displayCount]);
 
+  if (!showTethers || displayCount === 0) return null;
+
   return (
-    <lineSegments ref={groupRef} geometry={geometry}>
+    <lineSegments geometry={geometry}>
       <lineBasicMaterial color="#ffffff" opacity={0.2} transparent />
     </lineSegments>
   );

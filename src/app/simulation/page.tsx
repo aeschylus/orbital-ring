@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { ControlPanel } from "@/components/dom/ControlPanel";
+import { ParameterPanel } from "@/components/dom/ParameterPanel";
 
 const SimulationCanvas = dynamic(
   () =>
@@ -26,6 +27,7 @@ export default function SimulationPage() {
   return (
     <div className="relative h-screen w-screen">
       <SimulationCanvas />
+      <ParameterPanel />
       <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2">
         <ControlPanel />
       </div>
@@ -33,7 +35,7 @@ export default function SimulationPage() {
         <h2 className="text-sm font-semibold text-gray-300">
           Orbital Ring Simulator
         </h2>
-        <p className="text-xs text-gray-500">Phase 0 — Bootstrap</p>
+        <p className="text-xs text-gray-500">Phase 1 — Ring Visualization</p>
       </div>
     </div>
   );
